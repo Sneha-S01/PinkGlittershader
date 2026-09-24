@@ -1,0 +1,11 @@
+{
+  "name": "pixel-pink-holo-card",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  }
+}

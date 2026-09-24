@@ -1,0 +1,172 @@
+/* ------------------------------------------------------------------
+   Pixel Pink — holo business card
+   Stage is deliberately quiet: near-white studio, all colour on the card.
+------------------------------------------------------------------- */
+
+:root {
+  --card-aspect: 1.586;              /* ISO ID-1, credit-card proportion */
+  --card-w: min(76vw, 74vh * var(--card-aspect), 760px);
+  --card-h: calc(var(--card-w) / var(--card-aspect));
+
+  --stage-1: #ffffff;
+  --stage-2: #ffffff;
+  --ink: #3a3340;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: linear-gradient(180deg, var(--stage-1), var(--stage-2));
+  color: var(--ink);
+  font: 400 13px/1.5 ui-sans-serif, -apple-system, "Segoe UI", Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* The card is drawn by three.js on this full-viewport canvas: a real
+   extruded body with a rounded bevel, lit by an environment. See
+   src/lib/scene.js. */
+#scene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.stage {
+  position: relative;
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  perspective: 1581px;               /* overwritten to match the camera */
+  perspective-origin: 50% 50%;
+  pointer-events: none;
+}
+.stage > * { pointer-events: auto; }
+
+/* Invisible now. It stays laid out at the card's size so the 3D card is
+   sized from it, and it tilts in step with the camera so anything placed
+   in #content later sits on the card's face. */
+.card-rig {
+  position: relative;
+  width: var(--card-w);
+  height: var(--card-h);
+  transform-style: preserve-3d;
+  will-change: transform;
+  cursor: pointer;
+  outline: none;
+}
+
+.card-content {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  backface-visibility: hidden;       /* front copy turns away with the card */
+}
+
+.hint {
+  position: fixed;
+  left: 0; right: 0; bottom: 22px;
+  margin: 0;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: #9a94a2;
+  transition: opacity 0.6s ease;
+}
+.hint kbd {
+  font: inherit;
+  border: 1px solid #d9d5de;
+  border-radius: 4px;
+  padding: 1px 4px;
+  background: #fff;
+}
+.hint.is-faded { opacity: 0; }
+
+.gyro-btn {
+  position: fixed;
+  left: 50%; bottom: 54px;
+  transform: translateX(-50%);
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid #e2dde6;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* ---- art-direction panel ---- */
+.panel {
+  position: fixed;
+  top: 14px; right: 14px;
+  width: 236px;
+  max-height: calc(100vh - 28px);
+  overflow-y: auto;
+  padding: 12px 13px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 0 12px 34px rgba(70, 50, 80, 0.12);
+  font-size: 11px;
+  z-index: 10;
+}
+.panel h2 {
+  margin: 0 0 10px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8e879a;
+  font-weight: 500;
+}
+.panel .row { margin-bottom: 9px; }
+.panel label {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: #6d6577;
+  margin-bottom: 3px;
+}
+.panel label b { font-weight: 500; color: #a49dad; font-variant-numeric: tabular-nums; }
+.panel input[type="range"] {
+  width: 100%;
+  height: 3px;
+  appearance: none;
+  background: #e6e2ea;
+  border-radius: 2px;
+  outline: none;
+}
+.panel input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: #ff9dd2;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+.panel .actions { display: flex; gap: 6px; margin-top: 12px; }
+.panel button {
+  flex: 1;
+  font: inherit;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  padding: 6px 0;
+  border-radius: 7px;
+  border: 1px solid #e2dde6;
+  background: #fff;
+  color: #6d6577;
+  cursor: pointer;
+}
+.panel button:hover { background: #faf7fb; }
+

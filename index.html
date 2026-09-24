@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Pixel Pink — Holo Card</title>
+<link rel="stylesheet" href="./src/styles.css" />
+<script type="importmap">
+  { "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+</head>
+<body>
+  <canvas id="scene" aria-label="Holographic business card"></canvas>
+
+  <main class="stage">
+    <div class="card-rig" id="rig" role="button" tabindex="0" aria-label="Holographic card — activate to flip">
+      <!-- content layer intentionally empty for now -->
+      <div class="card-content" id="content"></div>
+    </div>
+
+    <button class="gyro-btn" id="gyro" hidden>enable tilt</button>
+    <p class="hint" id="hint">move your cursor · click to flip · press <kbd>H</kbd> for controls</p>
+    <noscript><p class="hint">This shader needs JavaScript.</p></noscript>
+  </main>
+
+  <div class="panel" id="panel" hidden></div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
